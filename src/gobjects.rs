@@ -1,4 +1,3 @@
-use std::collections::HashMap;
 use std::str::FromStr;
 use toml::Value;
 
@@ -63,13 +62,26 @@ pub fn default_object() -> GObject {
     }
 }
 
-pub type GObjects =  HashMap<String, GObject>;
+pub type GObjects =  Vec<GObject>;
+
+pub trait GObjectsFinder {
+    fn find(&self, name: &str) -> Option<&GObject>;
+}
+
+impl GObjectsFinder for GObjects {
+    fn find(&self, name: &str) -> Option<&GObject>{
+        for obj in self {
+            if &obj.name == name { return Some(&obj); }
+        }
+        None
+    }
+}
 
 pub fn parse_toml(toml_objects: &Value) -> GObjects {
     let mut objects = GObjects::new();
     for toml_object in toml_objects.as_slice().unwrap() {
         let gobject = parse_object(toml_object);
-        objects.insert(gobject.name.clone(), gobject);
+        objects.push(gobject);
     }
     objects
 }

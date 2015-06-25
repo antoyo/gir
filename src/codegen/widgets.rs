@@ -9,7 +9,7 @@ use nameutil::*;
 pub fn generate(env: &Env) {
     let root_path = PathBuf::from(&env.config.target_path).join("src/widgets");
     let objs = &env.config.objects;
-    for obj in objs.values() {
+    for obj in objs {
         if obj.status != GStatus::Generate || obj.gtype != GType::Widget {
             continue;
         }
