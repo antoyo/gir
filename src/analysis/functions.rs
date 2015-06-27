@@ -8,6 +8,7 @@ pub struct Info {
     pub glib_name: String,
     pub kind: library::FunctionKind,
     pub comented: bool,
+    pub deprecated: bool,
     //TODO: parameters, return value
 }
 
@@ -24,13 +25,18 @@ pub fn analyze(env: &Env, type_: &library::Class, class_tid: library::TypeId) ->
 
 fn analyze_function(env: &Env, type_: &library::Function, class_tid: library::TypeId) -> Info {
     //TODO: temp
-    let _ = env.library;
     let _ = class_tid;
+
+    let deprecated = match type_.deprecated_version {
+        Some(ref ver) => !env.config.allowed_deprecated_version.matches(ver),
+        None => false,
+    };
 
     Info {
         name: type_.name.clone(),
         glib_name: type_.c_identifier.clone(),
         kind: type_.kind,
         comented: false,
+        deprecated: deprecated,
     }
 }

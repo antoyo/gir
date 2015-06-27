@@ -17,6 +17,7 @@ pub struct Info {
     pub functions: Vec<functions::Info>,
     pub has_constructors: bool,
     pub has_methods: bool,
+    pub all_constructors_deprecated: bool,
 }
 
 impl Info {
@@ -77,7 +78,12 @@ pub fn new(env: &Env, obj: &GObject) -> Info {
     let has_constructors = !info.constructors().is_empty();
     let has_methods = !info.methods().is_empty();
 
+    let all_constructors_deprecated = has_constructors
+        && info.constructors().iter().all(|f| f.deprecated);
+
+    //TODO: remove deprecateds from functions
     info.has_constructors = has_constructors;
     info.has_methods = has_methods;
+    info.all_constructors_deprecated = all_constructors_deprecated;
     info
 }

@@ -1,5 +1,7 @@
+use semver::VersionReq;
 use std::io::prelude::*;
 use std::fs::File;
+
 use docopt::Docopt;
 use toml;
 
@@ -19,6 +21,7 @@ pub struct Config {
     pub library_name: String,
     pub target_path: String,
     pub objects: gobjects::GObjects,
+    pub allowed_deprecated_version: VersionReq,
 }
 
 impl Config {
@@ -49,6 +52,11 @@ impl Config {
             a => a
         };
 
+        let allowed_deprecated_version = VersionReq::parse(
+            toml.lookup("options.allowed_deprecated_version").map(|t| t.as_str().unwrap())
+            .unwrap_or("*")
+        ).unwrap();
+
         let objects = gobjects::parse_toml(toml.lookup("object").unwrap());
 
         Config {
@@ -56,6 +64,7 @@ impl Config {
             library_name: library_name.into(),
             target_path: target_path.into(),
             objects: objects,
+            allowed_deprecated_version: allowed_deprecated_version,
         }
     }
 }

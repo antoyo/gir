@@ -21,6 +21,10 @@ pub fn generate(env: &Env) {
             println!("Skipping {:?}, it has ignored parents", obj.name);
             continue;
         }
+        if class_analysis.all_constructors_deprecated {
+            println!("Skipping {:?}, all his constructors deprecated", obj.name);
+            continue;
+        }
 
         let path = root_path.join(file_name(&class_analysis.full_name));
         println!("Generating file {:?}", path);

@@ -4,13 +4,14 @@ use analysis;
 use env::Env;
 use super::{function, general};
 
+//TODO: where go `function`s: impl or trait?
 pub fn generate<W: Write>(w: &mut W, env: &Env, analysis: &analysis::widget::Info) -> Result<()>{
     let type_ = analysis.type_(&env.library);
 
     let mut generate_impl = false;
     let mut generate_trait = false;
 
-    generate_impl |= analysis.has_constructors;
+    generate_impl |= analysis.has_constructors && !analysis.all_constructors_deprecated;
 
     if analysis.has_children { generate_trait |= true } else { generate_impl |= true };
 

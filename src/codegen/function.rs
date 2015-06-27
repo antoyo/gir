@@ -8,6 +8,8 @@ use super::general::tabs;
 pub fn generate<W: Write>(w: &mut W, analysis: &analysis::functions::Info,
     in_trait: bool, only_declaration: bool, indent: i32) -> Result<()> {
 
+    if analysis.deprecated { return Ok(()) }
+
     let comment_prefix = if analysis.comented { "//" } else { "" };
     let pub_prefix = if in_trait { "" } else { "pub " };
     let declaration = declaration(analysis);
