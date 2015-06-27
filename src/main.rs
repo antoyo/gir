@@ -3,8 +3,9 @@ extern crate docopt;
 extern crate env_logger;
 #[macro_use]
 extern crate log;
-extern crate xml;
+extern crate semver;
 extern crate toml;
+extern crate xml;
 
 use env::Env;
 use library::*;

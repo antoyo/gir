@@ -24,6 +24,18 @@ name = "Gtk.Switch"
 status = "generate"
 
 [[object]]
+name = "Gtk.Range"
+status = "generate"
+
+[[object]]
+name = "Gtk.Scale"
+status = "generate"
+
+[[object]]
+name = "Gtk.HScale"
+status = "generate"
+
+[[object]]
 name = "Gtk.RadioButton"
 status = "generate"
 

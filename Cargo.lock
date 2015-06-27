@@ -6,6 +6,7 @@ dependencies = [
  "docopt 0.6.67 (registry+https://github.com/rust-lang/crates.io-index)",
  "env_logger 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "log 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "semver 0.1.19 (registry+https://github.com/rust-lang/crates.io-index)",
  "toml 0.1.20 (registry+https://github.com/rust-lang/crates.io-index)",
  "xml-rs 0.1.25 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
@@ -86,6 +87,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 [[package]]
 name = "rustc-serialize"
 version = "0.3.15"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
+name = "semver"
+version = "0.1.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]

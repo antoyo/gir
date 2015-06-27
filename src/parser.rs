@@ -1,3 +1,4 @@
+use semver::Version;
 use std::io::BufReader;
 use std::fs::File;
 use std::path::PathBuf;
@@ -536,6 +537,21 @@ impl Library {
         let name = try!(attrs.get("name").ok_or_else(|| mk_error!("Missing function name", parser)));
         let kind = try!(FunctionKind::from_str(kind_str).map_err(|why| mk_error!(why, parser)));
         let c_identifier = attrs.get("identifier").unwrap_or(name);
+        let deprecated = to_bool(attrs.get("deprecated").unwrap_or("none"));
+        let deprecated_version = if deprecated {
+            match attrs.get("deprecated-version") {
+                Some(s) => { //TODO HACK: semver don't accept major.minor version format
+                    let mut s2: String = s.into();
+                    if s2.len() < 5 { s2.push_str(".0") };
+                    let v = try!(Version::parse(&s2).map_err(|why|
+                        mk_error!(format!("Unparsable deprecated-version '{}': {}", s2, why), parser)));
+                    Some(v)
+                },
+                None => None,
+            }
+        } else {
+            None
+        };
         let mut params = Vec::new();
         let mut ret = None;
         loop {
@@ -568,6 +584,7 @@ impl Library {
                 name: name.into(),
                 c_identifier: c_identifier.into(),
                 kind: kind,
+                deprecated_version: deprecated_version,
                 parameters: params,
                 ret: ret,
             })

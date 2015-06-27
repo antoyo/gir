@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 use std::str::FromStr;
 use nameutil::split_namespace_name;
+use semver::Version;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum Transfer {
@@ -186,6 +187,7 @@ pub struct Function {
     pub name: String,
     pub c_identifier: String,
     pub kind: FunctionKind,
+    pub deprecated_version: Option<Version>,
     pub parameters: Vec<Parameter>,
     pub ret: Parameter,
 }
