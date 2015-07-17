@@ -13,8 +13,9 @@ external_libraries = [
    "Gdk",
    "Pango",
    "Cairo",
+   "xlib",
 ]
 
 ignore = [
-   "xlib.Window",
+#   "xlib.Window",
 ]

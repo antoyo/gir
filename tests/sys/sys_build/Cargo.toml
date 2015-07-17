@@ -31,3 +31,6 @@ path = "../gtk-sys"
 
 [dependencies.secret-sys]
 path = "../secret-sys"
+
+[dependencies.xlib-sys]
+path = "../xlib-sys"
