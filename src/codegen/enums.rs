@@ -1,6 +1,6 @@
 use analysis::namespaces;
 use case::CaseExt;
-use codegen::general::{self, version_condition, version_condition_string};
+use codegen::general::{self, deprecated_version, version_condition, version_condition_string};
 use config::gobjects::GObject;
 use env::Env;
 use file_saver;
@@ -24,7 +24,7 @@ use glib::translate::*;
 "));
 
         let configs = env.config.objects.values()
-            .filter(|c| { 
+            .filter(|c| {
                 c.status.need_generate() &&
                     c.type_id.map_or(false, |tid| tid.ns_id == namespaces::MAIN)
             });
@@ -72,6 +72,7 @@ fn generate_enum(env: &Env, w: &mut Write, enum_: &Enumeration, config: &GObject
         });
     }
 
+    try!(deprecated_version(w, enum_.deprecated_version, false, 0));
     try!(version_condition(w, env, enum_.version, false, 0));
     try!(writeln!(w, "#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]"));
     try!(writeln!(w, "pub enum {} {{", enum_.name));

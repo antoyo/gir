@@ -1,5 +1,5 @@
 use analysis::namespaces;
-use codegen::general::{self, version_condition, version_condition_string};
+use codegen::general::{self, deprecated_version, version_condition, version_condition_string};
 use config::gobjects::GObject;
 use env::Env;
 use file_saver;
@@ -21,7 +21,7 @@ use glib::translate::*;
 "));
 
         let configs = env.config.objects.values()
-            .filter(|c| { 
+            .filter(|c| {
                 c.status.need_generate() &&
                     c.type_id.map_or(false, |tid| tid.ns_id == namespaces::MAIN)
             });
@@ -46,6 +46,7 @@ use glib::translate::*;
 
 fn generate_flags(env: &Env, w: &mut Write, mod_rs: &mut Vec<String>, flags: &Bitfield,
                   config: &GObject) -> Result<()> {
+    try!(deprecated_version(w, flags.deprecated_version, false, 0));
     try!(version_condition(w, env, flags.version, false, 0));
     try!(writeln!(w, "bitflags! {{"));
     try!(writeln!(w, "    pub flags {}: u32 {{", flags.name));

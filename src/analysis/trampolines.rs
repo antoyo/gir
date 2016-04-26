@@ -19,13 +19,15 @@ pub struct Trampoline {
     pub ret: library::Parameter,
     pub bounds: Bounds,
     pub version: Option<Version>,
+    pub deprecated_version: Option<Version>,
 }
 
 pub type Trampolines = Vec<Trampoline>;
 
 pub fn analyze(env: &Env, signal: &library::Signal, type_tid: library::TypeId, in_trait: bool,
                trampolines: &mut Trampolines, used_types: &mut Vec<String>,
-               version: Option<Version>) -> Result<String, Vec<String>> {
+               version: Option<Version>, deprecated_version: Option<Version>)
+               -> Result<String, Vec<String>> {
     let errors = closure_errors(env, signal);
     if !errors.is_empty() {
         warn!("Can't generate {} trampoline for signal '{}'", type_tid.full_name(&env.library),
@@ -99,6 +101,7 @@ pub fn analyze(env: &Env, signal: &library::Signal, type_tid: library::TypeId, i
         ret: signal.ret.clone(),
         bounds: bounds,
         version: version,
+        deprecated_version: deprecated_version,
     };
     trampolines.push(trampoline);
     Ok(name)

@@ -3,7 +3,7 @@ use std::io::{Result, Write};
 use analysis;
 use chunk::Chunk;
 use env::Env;
-use super::general::version_condition;
+use super::general::{deprecated_version, version_condition};
 use super::signal_body;
 use super::trampoline::func_string;
 use writer::primitives::tabs;
@@ -21,6 +21,7 @@ pub fn generate(w: &mut Write, env: &Env, analysis: &analysis::signals::Info,
     let suffix = if only_declaration { ";" } else { " {" };
 
     try!(writeln!(w, ""));
+    try!(deprecated_version(w, analysis.deprecated_version, commented, indent));
     try!(version_condition(w, env, analysis.version, commented, indent));
     try!(writeln!(w, "{}{}{}{}{}", tabs(indent), comment_prefix,
                   pub_prefix, declaration, suffix));

@@ -118,6 +118,25 @@ pub fn version_condition_string(env: &Env, version: Option<Version>, commented: 
     }
 }
 
+pub fn deprecated_version(w: &mut Write, version: Option<Version>, commented: bool,
+                         indent: usize) -> Result<()> {
+    if let Some(s) = deprecated_version_string(version, commented, indent) {
+        try!(writeln!(w, "{}", s));
+    }
+    Ok(())
+}
+
+pub fn deprecated_version_string(version: Option<Version>, commented: bool, indent: usize)
+        -> Option<String> {
+    match version {
+        Some(v) => {
+            let comment = if commented { "//" } else { "" };
+            Some(format!("{}{}/*Deprecated since {}*/", tabs(indent), comment, v.to_feature()))
+        }
+        _ => None
+    }
+}
+
 pub fn cfg_condition(w: &mut Write, cfg_condition: &Option<String>, commented: bool, indent: usize)
                      -> Result<()> {
     let s = cfg_condition_string(cfg_condition, commented, indent);

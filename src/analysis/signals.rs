@@ -45,7 +45,7 @@ fn analyze_signal(env: &Env, signal: &library::Signal, type_tid: library::TypeId
 
     let connect_name = format!("connect_{}", nameutil::signal_to_snake(&signal.name));
     let trampoline_name = trampolines::analyze(env, signal, type_tid, in_trait, trampolines,
-                                               &mut used_types, version);
+                                               &mut used_types, version, deprecated_version);
 
     if trampoline_name.is_ok() {
         imports.add_used_types(&used_types, version);
