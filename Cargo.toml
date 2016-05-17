@@ -23,6 +23,10 @@ time = "*"
 hprof = "*"
 rustdoc-stripper = { git = "https://github.com/GuillaumeGomez/rustdoc-stripper" }
 
+[dependencies.quick-error]
+git = "http://github.com/tailhook/quick-error"
+branch = "context2"
+
 [build-dependencies]
 git2 = "*"
 

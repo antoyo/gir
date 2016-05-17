@@ -12,6 +12,8 @@ extern crate regex;
 extern crate time;
 extern crate hprof;
 extern crate stripper_lib;
+#[macro_use]
+extern crate quick_error;
 
 use std::cell::RefCell;
 use std::error::Error;

@@ -5,6 +5,7 @@ use std::io::Read;
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
 use toml;
+use quick_error::ResultExt;
 
 use git::repo_hash;
 use library::Library;
@@ -176,7 +177,7 @@ fn read_toml<P: AsRef<OsStr> + AsRef<Path>>(filename: P) -> Result<toml::Value, 
     let mut input = String::new();
     try!(File::open(&filename)
          .and_then(|mut f| f.read_to_string(&mut input))
-         .map_err(|e| Error::io(e, &filename)));
+         .context(filename.as_ref()));
 
     let mut parser = toml::Parser::new(&input);
     match parser.parse() {

@@ -3,22 +3,39 @@ use std::error::Error as StdError;
 use std::ffi::OsStr;
 use std::fmt::{self, Display, Formatter};
 use std::io::Error as IoError;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use toml;
 
-#[derive(Debug)]
-pub enum Error {
-    CommandLine(DocoptError),
-    Io(IoError, PathBuf),
-    Toml(String, PathBuf),
-    Options(String, PathBuf),
+quick_error!{
+    #[derive(Debug)]
+    pub enum Error {
+        CommandLine(err: DocoptError) {
+            from()
+            display("{}", err)
+        }
+        Io(err: IoError, filename: PathBuf) {
+            display("Failed to read config \"{}\": {}", filename.display(), err)
+            context(path: &'a Path, err: IoError)
+                    -> (err, path.to_path_buf())
+        }
+        Toml(err: String, filename: PathBuf) {
+            display("\"{}\": {}", filename.display(), err)
+/*            context(path: &'a Path, err: String)
+                    -> (err, path.to_path_buf())*/
+        }
+        Options(err: String, filename: PathBuf) {
+            display("\"{}\": {}", filename.display(), err)
+/*            context(path: &'a Path, err: String)
+                    -> (err, path.to_path_buf())*/
+        }
+    }
 }
 
 impl Error {
-    pub fn io<P: AsRef<OsStr>>(error: IoError, filename: P) -> Error {
+/*    pub fn io<P: AsRef<OsStr>>(error: IoError, filename: P) -> Error {
         Error::Io(error, PathBuf::from(&filename))
     }
-
+*/
     pub fn toml<S: Into<String>, P: AsRef<OsStr>>(error: S, filename: P) -> Error {
         Error::Toml(error.into(), PathBuf::from(&filename))
     }
@@ -27,7 +44,7 @@ impl Error {
         Error::Options(error.into(), PathBuf::from(&filename))
     }
 }
-
+/*
 impl StdError for Error {
     fn description(&self) -> &str {
         use self::Error::*;
@@ -63,7 +80,7 @@ impl From<DocoptError> for Error {
     fn from(e: DocoptError) -> Error {
         Error::CommandLine(e)
     }
-}
+}*/
 
 pub trait TomlHelper where Self: Sized {
     fn lookup_str<'a, P: AsRef<OsStr>>(&'a self, option: &'a str, err: &str, config_file: P) -> Result<&'a str, Error>;
