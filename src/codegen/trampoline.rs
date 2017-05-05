@@ -48,7 +48,7 @@ pub fn func_string(env: &Env, analysis: &Trampoline,
     let param_str = func_parameters(env, analysis, bound_replace);
     let return_str = func_returns(env, analysis);
 
-    format!("Fn({}){} + 'static", param_str, return_str)
+    format!("Fn({}){}", param_str, return_str)
 }
 
 fn func_parameters(env: &Env, analysis: &Trampoline,

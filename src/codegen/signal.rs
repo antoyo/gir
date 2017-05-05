@@ -71,9 +71,9 @@ fn function_type_string(env: &Env, analysis: &analysis::signals::Info,
 fn declaration(analysis: &analysis::signals::Info,
                function_type_string: &Option<String>) -> String {
     let bounds = bounds(function_type_string);
-    let param_str = "&self, f: F";
+    let param_str = "&'object_lifetime self, f: F";
     let return_str = " -> u64";
-    format!("fn {}<{}>({}){}", analysis.connect_name, bounds, param_str, return_str)
+    format!("fn {}<'object_lifetime, {} + 'object_lifetime>({}){}", analysis.connect_name, bounds, param_str, return_str)
 }
 
 fn bounds(function_type_string: &Option<String>) -> String {
